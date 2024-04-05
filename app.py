@@ -98,7 +98,7 @@ def log_hours():
         return render_template('log_hours.html', shifts=shifts)
 
 # Route for the administrator interface to manage hours
-@app.route('/admin/manage_hours')
+@app.route('/manage_hours')
 def manage_hours():
     db = connect_db()
     cur = db.cursor()
