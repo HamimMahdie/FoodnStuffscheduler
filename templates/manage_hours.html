@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Volunteer Hours</title>
+</head>
+<body>
+    <h1>Manage Volunteer Hours</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Volunteer Name</th>
+                <th>Shift ID</th>
+                <th>Hours Worked</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hour_entry in logged_hours %}
+                <tr>
+                    <td>{{ hour_entry[1] }}</td>
+                    <td>{{ hour_entry[2] }}</td>
+                    <td>{{ hour_entry[3] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
