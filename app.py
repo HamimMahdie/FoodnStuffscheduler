@@ -110,6 +110,47 @@ def manage_hours():
 #End of Volunteer stuffs
 
 
+#GoogleCalendar API- Hamim- 04.07.2024
+import os
+from flask import Flask, redirect, url_for, session
+from google_auth_oauthlib.flow import Flow
+from google.oauth2 import id_token
+from pip._vendor import cachecontrol
+import google.auth.transport.requests
+
+
+#app = Flask(__name__)
+#app.secret_key = 'your_secret_key'
+
+# Load client secrets
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # Required only for development
+GOOGLE_CLIENT_ID = "208062345148-mp5pboco1qgjcfveer33s5748tm5qnlm.apps.googleusercontent.com"
+client_secrets_file = os.path.join(os.path.dirname(__file__), "google_oauth_config.json")
+
+flow = Flow.from_client_secrets_file(
+    client_secrets_file=client_secrets_file,
+    scopes=["https://www.googleapis.com/auth/calendar"],
+    redirect_uri="http://localhost:5003/oauth2callback"
+)
+
+@app.route('/login/oauth2callback')
+def callback():
+    flow.fetch_token(authorization_response=request.url)
+
+    if not flow.credentials.is_valid():
+        return 'Failed to fetch valid credentials', 401
+
+    # Save credentials in the session or database as needed
+    session['credentials'] = {
+        'token': flow.credentials.token,
+        'refresh_token': flow.credentials.refresh_token,
+        'token_uri': flow.credentials.token_uri,
+        'client_id': flow.credentials.client_id,
+        'client_secret': flow.credentials.client_secret,
+        'scopes': flow.credentials.scopes,
+    }
+
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5003)
