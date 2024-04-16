@@ -15,6 +15,16 @@
             <li>Sign up for new events</li>
             <li>Manage your volunteer profile</li>
         </ul>
+        
+        <h1>Available Shifts</h1>
+{% for shift in shifts %}
+    <div>
+        <h2>{{ shift[1] }}</h2> <!-- Title -->
+        <p>{{ shift[2] }} to {{ shift[3] }}</p> <!-- Start to End Time -->
+        <p>{{ shift[4] }}</p> <!-- Description -->
+    </div>
+{% endfor %}
+
         <div class="dashboard-actions">
             <a href="{{ url_for('log_hours') }}" class="button">Log Hours</a>
             <a href="{{ url_for('manage_hours') }}" class="button">Manage Hours</a>

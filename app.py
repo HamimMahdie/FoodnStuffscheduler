@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 # Simulating a database with a dictionary, including a role for each user
-# Note: Changed 'sha256' to 'pbkdf2:sha256' in generate_password_hash method
 users = {
     'admin1@trincoll.edu': {'password': generate_password_hash('415', method='pbkdf2:sha256'), 'role': 'admin'},
     'volunteer1@trincoll.edu': {'password': generate_password_hash('415', method='pbkdf2:sha256'), 'role': 'volunteer'}
@@ -22,14 +22,12 @@ def login():
     user = users.get(email)
     
     if user and check_password_hash(user['password'], password):
-        # Login successful
         flash('Login successful!', 'success')
         if user['role'] == 'admin':
             return redirect(url_for('admin_ui'))
         elif user['role'] == 'volunteer':
             return redirect(url_for('volunteer_ui'))
     else:
-        # Login failed
         flash('Invalid email or password.', 'danger')
     return redirect(url_for('index'))
 
@@ -52,23 +50,60 @@ def signup():
     flash('Account created successfully, please login.', 'success')
     return redirect(url_for('index'))
 
+# Database connection function
+def connect_db():
+    return sqlite3.connect('volunteer_hours.db')
+
+@app.route('/post_shift', methods=['POST'])
+def post_shift():
+    title = request.form['shift_title']
+    start_datetime = request.form['start_datetime']
+    end_datetime = request.form['end_datetime']
+    description = request.form['description']
+
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('INSERT INTO shifts (title, start_time, end_time, description) VALUES (?, ?, ?, ?)',
+                (title, start_datetime, end_datetime, description))
+    db.commit()
+    db.close()
+    flash('Shift posted successfully.', 'success')
+    return redirect(url_for('admin_ui'))
+
+
 @app.route('/admin')
 def admin_ui():
-    # Ensure this page has some form of access control in a real application
     return render_template('admin_ui.html')
+
 
 @app.route('/volunteer')
 def volunteer_ui():
-    # Ensure this page has some form of access control in a real application
-    return render_template('volunteer_ui.html')
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('SELECT * FROM shifts')
+    shifts = cur.fetchall()
+    db.close()
+    return render_template('volunteer_ui.html', shifts=shifts)
 
 
+def init_db():
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS shifts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            start_time TEXT NOT NULL,
+            end_time TEXT NOT NULL,
+            description TEXT
+        )
+    ''')
+    db.commit()
+    db.close()
 
+init_db()
 
-
-#Volunteer stuffs WIP
-import sqlite3
-
+# Database connection function
 def connect_db():
     return sqlite3.connect('volunteer_hours.db')
 
@@ -79,7 +114,6 @@ def log_hours():
         volunteer_name = request.form['volunteer_name']
         shift_id = request.form['shift_id']
         hours_worked = request.form['hours_worked']
-        # Insert the logged hours into the database
         db = connect_db()
         cur = db.cursor()
         cur.execute('INSERT INTO hours (volunteer_name, shift_id, hours_worked) VALUES (?, ?, ?)',
@@ -89,7 +123,6 @@ def log_hours():
         flash('Hours logged successfully', 'success')
         return redirect(url_for('log_hours'))
     else:
-        # Fetch shift data from the database and pass it to the template
         db = connect_db()
         cur = db.cursor()
         cur.execute('SELECT * FROM shifts')
@@ -106,51 +139,6 @@ def manage_hours():
     logged_hours = cur.fetchall()
     db.close()
     return render_template('manage_hours.html', logged_hours=logged_hours)
-
-#End of Volunteer stuffs
-
-
-#GoogleCalendar API- Hamim- 04.07.2024
-import os
-from flask import Flask, redirect, url_for, session
-from google_auth_oauthlib.flow import Flow
-from google.oauth2 import id_token
-from pip._vendor import cachecontrol
-import google.auth.transport.requests
-
-
-#app = Flask(__name__)
-#app.secret_key = 'your_secret_key'
-
-# Load client secrets
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # Required only for development
-GOOGLE_CLIENT_ID = "208062345148-mp5pboco1qgjcfveer33s5748tm5qnlm.apps.googleusercontent.com"
-client_secrets_file = os.path.join(os.path.dirname(__file__), "google_oauth_config.json")
-
-flow = Flow.from_client_secrets_file(
-    client_secrets_file=client_secrets_file,
-    scopes=["https://www.googleapis.com/auth/calendar"],
-    redirect_uri="http://localhost:5003/oauth2callback"
-)
-
-@app.route('/login/oauth2callback')
-def callback():
-    flow.fetch_token(authorization_response=request.url)
-
-    if not flow.credentials.is_valid():
-        return 'Failed to fetch valid credentials', 401
-
-    # Save credentials in the session or database as needed
-    session['credentials'] = {
-        'token': flow.credentials.token,
-        'refresh_token': flow.credentials.refresh_token,
-        'token_uri': flow.credentials.token_uri,
-        'client_id': flow.credentials.client_id,
-        'client_secret': flow.credentials.client_secret,
-        'scopes': flow.credentials.scopes,
-    }
-
-    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5003)
