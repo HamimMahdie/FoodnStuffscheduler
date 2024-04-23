@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Control Panel</title>
+</head>
+<body>
+    <h1>Manager Control Panel</h1>
+    <p>Welcome to the manager control panel. Here you can manage shifts and volunteers.</p>
+    <ul>
+        <li><a href="{{ url_for('manage_schedule') }}">Manage Schedule</a></li>
+        <!-- Add more links/buttons for other manager controls as needed -->
+    </ul>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Schedule</title>
+</head>
+<body>
+    <h1>Manage Schedule</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Volunteer Name</th>
+                <th>Shift ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in schedule %}
+                <tr>
+                    <td>{{ entry[0] }}</td>
+                    <td>{{ entry[1] }}</td>
+                    <td>
+                        <form action="{{ url_for('remove_volunteer') }}" method="post">
+                            <input type="hidden" name="volunteer_name" value="{{ entry[0] }}">
+                            <input type="hidden" name="shift_id" value="{{ entry[1] }}">
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>Add Volunteer to Shift</h2>
+    <form action="{{ url_for('add_volunteer') }}" method="post">
+        <label for="volunteer_name">Volunteer Name:</label>
+        <input type="text" id="volunteer_name" name="volunteer_name" required><br>
+        <label for="shift_id">Shift ID:</label>
+        <input type="text" id="shift_id" name="shift_id" required><br>
+        <button type="submit">Add Volunteer</button>
+    </form>
+</body>
+</html>
