@@ -100,6 +100,15 @@ def init_db():
             description TEXT
         )
     ''')
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS hours (
+            entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            volunteer_name TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            shift_id INTEGER,
+            hours_worked REAL NOT NULL
+        )
+    ''')
     db.commit()
     db.close()
 
