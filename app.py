@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 
@@ -22,6 +23,7 @@ def login():
     user = users.get(email)
     
     if user and check_password_hash(user['password'], password):
+        session['user_email'] = email  # Save the user's email in the session
         flash('Login successful!', 'success')
         if user['role'] == 'admin':
             return redirect(url_for('admin_ui'))
@@ -114,10 +116,11 @@ def log_hours():
         volunteer_name = request.form['volunteer_name']
         shift_id = request.form['shift_id']
         hours_worked = request.form['hours_worked']
+        email = session.get('user_email')  # Retrieve email from session
         db = connect_db()
         cur = db.cursor()
-        cur.execute('INSERT INTO hours (volunteer_name, shift_id, hours_worked) VALUES (?, ?, ?)',
-                    (volunteer_name, shift_id, hours_worked))
+        cur.execute('INSERT INTO hours (volunteer_name, email, shift_id, hours_worked) VALUES (?, ?, ?, ?)',
+                    (volunteer_name, email, shift_id, hours_worked))
         db.commit()
         db.close()
         flash('Hours logged successfully', 'success')
