@@ -147,10 +147,11 @@ def log_hours():
 def manage_hours():
     db = connect_db()
     cur = db.cursor()
-    cur.execute('SELECT * FROM hours')
+    cur.execute('SELECT * FROM hours ORDER BY entry_id DESC')
     logged_hours = cur.fetchall()
     db.close()
     return render_template('manage_hours.html', logged_hours=logged_hours)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5003)
+
