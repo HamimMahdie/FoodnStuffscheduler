@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Shift</title>
+</head>
+<body>
+    <h1>Add New Shift</h1>
+    <form action="{{ url_for('add_shift') }}" method="post">
+        <label for="shift_title">Title:</label>
+        <input type="text" id="shift_title" name="shift_title" required><br>
+        <label for="start_datetime">Start Time:</label>
+        <input type="datetime-local" id="start_datetime" name="start_datetime" required><br>
+        <label for="end_datetime">End Time:</label>
+        <input type="datetime-local" id="end_datetime" name="end_datetime" required><br>
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" rows="4" required></textarea><br>
+        <button type="submit">Add Shift</button>
+    </form>
+    <a href="{{ url_for('view_shifts') }}">Back to Shifts</a>
+</body>
+</html>
