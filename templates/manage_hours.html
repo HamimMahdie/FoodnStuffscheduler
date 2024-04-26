@@ -7,6 +7,9 @@
 </head>
 <body>
     <h1>Manage Volunteer Hours</h1>
+    <form action="{{ url_for('clear_hours') }}" method="post">
+        <button type="submit">Clear All Hours</button>
+    </form>
     <table border="1">
         <thead>
             <tr>

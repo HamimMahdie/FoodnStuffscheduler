@@ -152,6 +152,16 @@ def manage_hours():
     db.close()
     return render_template('manage_hours.html', logged_hours=logged_hours)
 
+@app.route('/clear_hours', methods=['POST'])
+def clear_hours():
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('DELETE FROM hours')  # This will clear the entire table
+    db.commit()
+    db.close()
+    flash('All hours have been cleared.', 'success')
+    return redirect(url_for('manage_hours'))
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5003)
 
