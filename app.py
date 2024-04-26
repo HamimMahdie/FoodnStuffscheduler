@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+
 import sqlite3
 
 app = Flask(__name__)
@@ -22,6 +24,7 @@ def login():
     user = users.get(email)
     
     if user and check_password_hash(user['password'], password):
+        session['email'] = email  # Store email in session upon successful login
         flash('Login successful!', 'success')
         if user['role'] == 'admin':
             return redirect(url_for('admin_ui'))
@@ -30,6 +33,7 @@ def login():
     else:
         flash('Invalid email or password.', 'danger')
     return redirect(url_for('index'))
+
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -86,6 +90,7 @@ def volunteer_ui():
     return render_template('volunteer_ui.html', shifts=shifts)
 
 
+
 def init_db():
     db = connect_db()
     cur = db.cursor()
@@ -95,13 +100,39 @@ def init_db():
             title TEXT NOT NULL,
             start_time TEXT NOT NULL,
             end_time TEXT NOT NULL,
-            description TEXT
+            description TEXT,
+            volunteer_email TEXT,
+            signed_up INTEGER DEFAULT 0  -- 0 for not signed up, 1 for signed up
         )
     ''')
     db.commit()
     db.close()
 
+
 init_db()
+
+@app.route('/signup_shift/<int:shift_id>', methods=['POST'])
+def signup_shift(shift_id):
+    volunteer_email = session.get('email')  # Retrieve the logged-in user's email
+    if not volunteer_email:
+        flash('You must be logged in to sign up for shifts.', 'danger')
+        return redirect(url_for('login'))
+
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('SELECT signed_up FROM shifts WHERE id = ?', (shift_id,))
+    shift = cur.fetchone()
+    if shift and shift[0] == 0:  # If not signed up
+        cur.execute('UPDATE shifts SET volunteer_email = ?, signed_up = 1 WHERE id = ?', (volunteer_email, shift_id))
+        db.commit()
+        flash('You have successfully signed up for the shift!', 'success')
+    else:
+        flash('This shift is already taken.', 'danger')
+    db.close()
+    return redirect(url_for('volunteer_ui'))
+
+
+
 
 # Database connection function
 def connect_db():
@@ -142,3 +173,7 @@ def manage_hours():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5003)
+
+
+
+#quarkscheduling helkps you make run cron jobs

@@ -5,6 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .dashboard-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .shift {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .shift h3 {
+            color: #333;
+        }
+        .shift p {
+            color: #666;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            border-radius: 5px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        form {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -16,14 +53,21 @@
             <li>Manage your volunteer profile</li>
         </ul>
         
-        <h1>Available Shifts</h1>
-{% for shift in shifts %}
-    <div>
-        <h2>{{ shift[1] }}</h2> <!-- Title -->
-        <p>{{ shift[2] }} to {{ shift[3] }}</p> <!-- Start to End Time -->
-        <p>{{ shift[4] }}</p> <!-- Description -->
-    </div>
-{% endfor %}
+        <h2>Available Shifts</h2>
+        {% for shift in shifts %}
+        <div class="shift">
+            <h3>{{ shift[1] }}</h3> <!-- Access title by index -->
+            <p>{{ shift[2] }} to {{ shift[3] }}</p> <!-- Access start and end times by index -->
+            <p>{{ shift[4] }}</p> <!-- Access description by index -->
+            {% if shift[6] == 0 %}
+            <form action="{{ url_for('signup_shift', shift_id=shift[0]) }}" method="post">
+                <button type="submit" class="button">Sign Up</button>
+            </form>
+            {% else %}
+            <p><strong>{{ shift[5] }} has signed up.</strong></p> <!-- Access volunteer email by index -->
+            {% endif %}
+        </div>
+        {% endfor %}
 
         <div class="dashboard-actions">
             <a href="{{ url_for('log_hours') }}" class="button">Log Hours</a>
