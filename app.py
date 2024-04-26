@@ -147,10 +147,16 @@ def log_hours():
 def manage_hours():
     db = connect_db()
     cur = db.cursor()
-    cur.execute('SELECT * FROM hours ORDER BY entry_id DESC')
+    cur.execute('''
+        SELECT hours.entry_id, hours.volunteer_name, hours.hours_worked, shifts.title, shifts.start_time, shifts.end_time
+        FROM hours
+        INNER JOIN shifts ON hours.shift_id = shifts.id
+        ORDER BY hours.entry_id DESC
+    ''')
     logged_hours = cur.fetchall()
     db.close()
     return render_template('manage_hours.html', logged_hours=logged_hours)
+
 
 @app.route('/clear_hours', methods=['POST'])
 def clear_hours():
