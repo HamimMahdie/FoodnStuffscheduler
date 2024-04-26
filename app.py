@@ -104,7 +104,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS hours (
             entry_id INTEGER PRIMARY KEY AUTOINCREMENT,
             volunteer_name TEXT NOT NULL,
-            email TEXT UNIQUE NOT NULL,
+            email TEXT NOT NULL,
             shift_id INTEGER,
             hours_worked REAL NOT NULL
         )
