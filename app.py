@@ -22,6 +22,10 @@ def login():
     password = request.form['login-password']
     user = users.get(email)
     
+    email = request.form['login-email']
+    password = request.form['login-password']
+    user = users.get(email)
+    
     if user and check_password_hash(user['password'], password):
         session['user_email'] = email  # Save the user's email in the session
         flash('Login successful!', 'success')
@@ -31,9 +35,9 @@ def login():
             return redirect(url_for('volunteer_ui'))
     else:
         flash('Invalid email or password.', 'danger')
-        return render_template('index.html', flash_messages=get_flashed_messages())
 
-    return redirect(url_for('index'))  # Redirect to home page if login is successful
+    # Pass flashed messages to the login page template
+    return render_template('index.html', flash_messages=get_flashed_messages())
 
 @app.route('/signup', methods=['POST'])
 def signup():
