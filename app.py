@@ -168,6 +168,48 @@ def clear_hours():
     flash('All hours have been cleared.', 'success')
     return redirect(url_for('manage_hours'))
 
+
+# manager can add and delete existing shifts
+
+@app.route('/shifts')
+def view_shifts():
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('SELECT * FROM shifts')
+    shifts = cur.fetchall()
+    db.close()
+    return render_template('view_shifts.html', shifts=shifts)
+
+@app.route('/add_shift', methods=['GET', 'POST'])
+def add_shift():
+    if request.method == 'POST':
+        title = request.form['shift_title']
+        start_datetime = request.form['start_datetime']
+        end_datetime = request.form['end_datetime']
+        description = request.form['description']
+
+        db = connect_db()
+        cur = db.cursor()
+        cur.execute('INSERT INTO shifts (title, start_time, end_time, description) VALUES (?, ?, ?, ?)',
+                    (title, start_datetime, end_datetime, description))
+        db.commit()
+        db.close()
+        flash('Shift added successfully.', 'success')
+        return redirect(url_for('view_shifts'))
+    else:
+        return render_template('add_shift.html')
+
+@app.route('/delete_shift/<int:shift_id>', methods=['POST'])
+def delete_shift(shift_id):
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('DELETE FROM shifts WHERE id = ?', (shift_id,))
+    db.commit()
+    db.close()
+    flash('Shift deleted successfully.', 'success')
+    return redirect(url_for('view_shifts'))
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5003)
 
