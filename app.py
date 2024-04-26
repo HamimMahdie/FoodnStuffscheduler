@@ -31,7 +31,9 @@ def login():
             return redirect(url_for('volunteer_ui'))
     else:
         flash('Invalid email or password.', 'danger')
-    return redirect(url_for('index'))
+        return render_template('index.html', flash_messages=get_flashed_messages())
+
+    return redirect(url_for('index'))  # Redirect to home page if login is successful
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -41,11 +43,11 @@ def signup():
 
     if email in users:
         flash('Email already exists.', 'danger')
-        return redirect(url_for('index'))
+        return render_template('index.html', flash_messages=get_flashed_messages())
 
     if password != confirm_password:
         flash('Passwords do not match.', 'danger')
-        return redirect(url_for('index'))
+        return render_template('index.html', flash_messages=get_flashed_messages())
 
     hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
     users[email] = {'password': hashed_password, 'role': 'volunteer'}  # Default role is volunteer
