@@ -4,12 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Coordination and Scheduling Tool</title>
-    <!-- Link to the CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .donate-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .donate-button:hover {
+            background-color: #1c7430;
+        }
+    </style>
 </head>
 <body>
+    <h1>Food 'n Stuff Scheduler</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div class="auth-container">
-        <!-- Updated the action attribute for login -->
         <div class="form-container" id="login-form">
             <h2>Login</h2>
             <form action="/login" method="post">
@@ -24,7 +51,8 @@
                 <button type="submit">Login</button>
             </form>
         </div>
-        <!-- Updated the action attribute for signup -->
+    </div>
+    <div class="auth-container">
         <div class="form-container" id="signup-form">
             <h2>Sign Up</h2>
             <form action="/signup" method="post">
@@ -44,5 +72,8 @@
             </form>
         </div>
     </div>
+    <h1>About</h1>
+    <p class="footer">Food 'n Stuff is Trinity's student food and hygiene product pantry available to all students for free.</p>
+    <a href="{{ url_for('donate') }}" class="donate-button">Donate</a>
 </body>
-</html>
+</html

@@ -5,8 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const submitButtons = document.querySelectorAll('button[type="submit"]');
+            submitButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    setTimeout(() => { // Delay button disable to allow form submission
+                        button.disabled = true;
+                    }, 100); // Delay of 100 milliseconds
+                });
+            });
+        });
+    </script>
+    
 </head>
 <body>
+    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
     <div class="dashboard-container">
         <h1>Welcome, Volunteer!</h1>
         <p>This is your dashboard. From here, you can:</p>
@@ -15,15 +29,22 @@
             <li>Sign up for new events</li>
             <li>Manage your volunteer profile</li>
         </ul>
-        
+
         <h1>Available Shifts</h1>
-{% for shift in shifts %}
-    <div>
-        <h2>{{ shift[1] }}</h2> <!-- Title -->
-        <p>{{ shift[2] }} to {{ shift[3] }}</p> <!-- Start to End Time -->
-        <p>{{ shift[4] }}</p> <!-- Description -->
-    </div>
-{% endfor %}
+        {% for shift in shifts %}
+        <div class="shift-container">
+            <h2>{{ shift[1] }}</h2> <!-- Title -->
+            <p>{{ shift[2] }} to {{ shift[3] }}</p> <!-- Start to End Time -->
+            <p>{{ shift[4] }}</p> <!-- Description -->
+            {% if shift[5] %}
+                <p>{{ shift[5] }} signed up for this shift</p>
+            {% else %}
+                <form action="{{ url_for('signup_for_shift', shift_id=shift[0]) }}" method="post">
+                    <button onclick="disable(this)" type="submit" data-email="{{ user_email }}">Sign Up</button>
+                </form>
+            {% endif %}
+        </div>
+        {% endfor %}
 
         <div class="dashboard-actions">
             <a href="{{ url_for('log_hours') }}" class="button">Log Hours</a>

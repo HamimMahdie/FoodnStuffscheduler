@@ -1,29 +1,62 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
     margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Changes layout to vertical stacking */
+    justify-content: flex-start; /* Aligns content to the start of the main axis */
+    align-items: center; /* Keeps items centered on the cross axis */
+    min-height: 100vh; /* Ensures it at least covers the viewport */
+    overflow: auto; /* Allows scrolling */
+    position: relative; /* Ensures that absolute positioning inside body is relative to it */
 }
 
+
+.logout-button {
+    position: fixed; /* Fixes the button relative to the viewport */
+    top: 10px; /* Space from the top of the viewport */
+    right: 10px; /* Space from the right of the viewport */
+    background-color: #dc3545; /* Bootstrap danger color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    z-index: 1000; /* Ensures it stays on top of other content */
+}
+
+.logout-button:hover {
+    background-color: #c82333;
+}
+
+
+
 .auth-container {
+    width: 90%;                        /* Adjusted width as per HTML specifics */
+    max-width: 600px;                  /* Added max-width constraint */
+    margin: 20px auto;                 /* Centered and added vertical margin */
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .form-container {
-    margin: 10px;
+    margin-bottom: 20px;               /* Updated margin-bottom for separation */
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-h2 {
+h1, h2 {
     text-align: center;
+    color: #333;                       /* Ensuring consistent text color for headers */
 }
 
 .form-group {
@@ -35,27 +68,41 @@ label {
     margin-bottom: 5px;
 }
 
-input[type="email"], input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin: 0 0 20px 0;
+input[type="email"], input[type="password"], input[type="text"] {
+    width: calc(100% - 12px);          /* Adjusted width to account for padding */
+    padding: 10px;
+    margin: 0 0 20px 0;                /* Added consistent margin */
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
 }
 
-button[type="submit"] {
-    width: 100%;
-    background-color: #4CAF50;
+button, .donate-button {
+    width: 100%;                       /* Ensuring buttons take full container width */
+    padding: 10px 20px;                /* Uniform padding for all buttons */
+    background-color: #007BFF;         /* Standardized button color */
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-button[type="submit"]:hover {
-    background-color: #45a049;
+button:hover, .donate-button:hover {
+    background-color: #0056b3;         /* Darker shade on hover for better UX */
+}
+
+button:hover {
+    background-color: #c82333; /* Darker shade of red on hover */
+}
+
+.footer {
+    text-align: center;                /* Centralized footer text */
+    margin-top: 20px;
+    font-size: 14px;                   /* Uniform font size for footer */
+}
+
+/* Additional styles for other aspects of the interface */
+.hidden {
+    display: none;                     /* Ensuring hidden class is available */
 }

@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask
+from email_service import init_mail
 
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
@@ -11,6 +13,17 @@ users = {
     'admin1@trincoll.edu': {'password': generate_password_hash('415', method='pbkdf2:sha256'), 'role': 'admin'},
     'volunteer1@trincoll.edu': {'password': generate_password_hash('415', method='pbkdf2:sha256'), 'role': 'volunteer'}
 }
+
+
+# Email configuration
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'slobber6@gmail.com'
+app.config['MAIL_PASSWORD'] = 'vueh tzec wfaj pwvp'
+
+init_mail(app)  # Initialize the mail configuration from email_service
+
 
 @app.route('/')
 def index():
@@ -62,15 +75,23 @@ def post_shift():
     start_datetime = request.form['start_datetime']
     end_datetime = request.form['end_datetime']
     description = request.form['description']
-
+    '''
+    email = session.get('user_email', None)  # Get the email from session, or None if not logged in
+'''
     db = connect_db()
     cur = db.cursor()
-    cur.execute('INSERT INTO shifts (title, start_time, end_time, description) VALUES (?, ?, ?, ?)',
-                (title, start_datetime, end_datetime, description))
+    ''''''
+    # Check if the email should be recorded at the time of shift creation
+    
+    cur.execute('INSERT INTO shifts (title, start_time, end_time, description, volunteer_email) VALUES (?, ?, ?, ?, NULL)',
+                    (title, start_datetime, end_datetime, description))
+    
+    
     db.commit()
     db.close()
     flash('Shift posted successfully.', 'success')
     return redirect(url_for('admin_ui'))
+
 
 
 @app.route('/admin')
@@ -82,23 +103,25 @@ def admin_ui():
 def volunteer_ui():
     db = connect_db()
     cur = db.cursor()
-    cur.execute('SELECT * FROM shifts')
-    shifts = cur.fetchall()
+    cur.execute('SELECT id, title, start_time, end_time, description, volunteer_email FROM shifts')
+    shifts = cur.fetchall()  # Make sure this query is correctly fetching the latest data
     db.close()
-    return render_template('volunteer_ui.html', shifts=shifts)
-
+    return render_template('volunteer_ui.html', shifts=shifts, user_email=session.get('user_email', ''))
 
 def init_db():
     db = connect_db()
     cur = db.cursor()
+    
+    # Recreate the tables
     cur.execute('''
         CREATE TABLE IF NOT EXISTS shifts (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
             start_time TEXT NOT NULL,
             end_time TEXT NOT NULL,
-            description TEXT
-        )
+            description TEXT,
+            signed_up INTEGER DEFAULT 0,
+            volunteer_email TEXT)
     ''')
     cur.execute('''
         CREATE TABLE IF NOT EXISTS hours (
@@ -106,13 +129,13 @@ def init_db():
             volunteer_name TEXT NOT NULL,
             email TEXT NOT NULL,
             shift_id INTEGER,
-            hours_worked REAL NOT NULL
-        )
+            hours_worked REAL NOT NULL)
     ''')
     db.commit()
     db.close()
 
-init_db()
+
+
 
 # Database connection function
 def connect_db():
@@ -141,6 +164,37 @@ def log_hours():
         shifts = cur.fetchall()
         db.close()
         return render_template('log_hours.html', shifts=shifts)
+    
+
+@app.route('/signup_for_shift/<int:shift_id>', methods=['POST'])
+def signup_for_shift(shift_id):
+    
+    if 'user_email' not in session:
+        flash('You need to log in to sign up for shifts.', 'danger')
+        return redirect(url_for('index'))
+    
+    email = session['user_email']
+    db = connect_db()
+    cur = db.cursor()
+    # Update to overwrite the existing volunteer_email, regardless of its current value
+    print(f"Attempting to update shift {shift_id} with email {email}")
+    cur.execute('UPDATE shifts SET volunteer_email = ? WHERE id = ?', (email, shift_id))
+    db.commit()
+    print(f"Updated {cur.rowcount} rows")  # This will tell you how many rows were affected by the update
+
+    
+    print("hello world") #for debugging
+
+    
+    # Check if the update was successful
+    if cur.rowcount == 0:
+        flash('No such shift exists.', 'danger')
+    else:
+        flash('You have successfully signed up for the shift.', 'success')
+    
+    return redirect(url_for('volunteer_ui'))
+
+
 
 # Route for the administrator interface to manage hours
 @app.route('/manage_hours')
@@ -152,6 +206,91 @@ def manage_hours():
     db.close()
     return render_template('manage_hours.html', logged_hours=logged_hours)
 
+@app.route('/clear_hours', methods=['POST'])
+def clear_hours():
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('DELETE FROM hours')  # This will clear the entire table
+    db.commit()
+    db.close()
+    flash('All hours have been cleared.', 'success')
+    return redirect(url_for('manage_hours'))
+
+@app.route('/shifts')
+def view_shifts():
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('SELECT * FROM shifts')
+    shifts = cur.fetchall()
+    db.close()
+    return render_template('view_shifts.html', shifts=shifts)
+
+@app.route('/delete_shift/<int:shift_id>', methods=['POST'])
+def delete_shift(shift_id):
+    db = connect_db()
+    cur = db.cursor()
+    cur.execute('DELETE FROM shifts WHERE id = ?', (shift_id,))
+    db.commit()
+    db.close()
+    flash('Shift deleted successfully.', 'success')
+    return redirect(url_for('view_shifts'))
+
+
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'no-store'
+    return response
+
+from email_service import send_email
+
+from flask import render_template, request, redirect, url_for
+
+@app.route('/donate', methods=['GET', 'POST'])
+def donate():
+    if request.method == 'POST':
+        # Extract form data
+        name = request.form.get('name')
+        email = request.form.get('email')
+        affiliation = request.form.get('affiliation')
+        donation_type = request.form.getlist('donation_type')  # Using getlist to handle checkboxes
+        dedicated_amount = request.form.get('dedicated_amount', '')
+        dedicated_items = request.form.get('dedicated_items', '')
+        phone = request.form.get('phone', '')  # Capture phone number
+
+        # Prepare the email body with all information
+        body = f"""
+        New donation from:
+        Name: {name}
+        Email: {email}
+        Phone: {phone}  
+        Affiliation: {affiliation}
+        Donation Type: {', '.join(donation_type)}
+        Dedicated Amount: {dedicated_amount}
+        Dedicated Items: {dedicated_items}
+        """
+
+        # Sending the email
+        send_email("New Donation Received",
+                   sender=app.config['MAIL_USERNAME'],
+                   recipients=["hamim5344@gmail.com"],
+                   body=body)
+
+        return redirect(url_for('thank_you'))
+    else:
+        # Load the donation form on GET request
+        return render_template('donate.html')
+
+
+@app.route('/thankyou')
+def thank_you():
+    return render_template('thankyou.html')
+@app.route('/logout')
+def logout():
+    session.pop('user_email', None)  # Remove the user email from session
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('index'))
 if __name__ == '__main__':
+    init_db()  # This will ensure the database schema is up-to-date
     app.run(debug=True, host='0.0.0.0', port=5003)
+
 
