@@ -272,7 +272,7 @@ def donate():
         # Sending the email
         send_email("New Donation Received",
                    sender=app.config['MAIL_USERNAME'],
-                   recipients=["hamim5344@gmail.com"],
+                   recipients=["bailebeni01@gmail.com"],
                    body=body)
 
         return redirect(url_for('thank_you'))
