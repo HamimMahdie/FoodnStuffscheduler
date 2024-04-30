@@ -19,8 +19,8 @@ users = {
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'slobber6@gmail.com'
-app.config['MAIL_PASSWORD'] = 'vueh tzec wfaj pwvp'
+app.config['MAIL_USERNAME'] = '[YOU HAVE TO ENTER EMAIL HERE]'
+app.config['MAIL_PASSWORD'] = '[YOU HAVE TO ENTER APP PASSWORDS HERE]'
 
 init_mail(app)  # Initialize the mail configuration from email_service
 
