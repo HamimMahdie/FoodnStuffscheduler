@@ -71,6 +71,11 @@ def connect_db():
 
 @app.route('/post_shift', methods=['POST'])
 def post_shift():
+    
+    if 'user_email' not in session:
+        flash('You need admin access to post shifts.', 'danger')
+        return redirect(url_for('index'))
+    
     title = request.form['shift_title']
     start_datetime = request.form['start_datetime']
     end_datetime = request.form['end_datetime']
@@ -289,8 +294,18 @@ def logout():
     session.pop('user_email', None)  # Remove the user email from session
     flash('You have been logged out.', 'success')
     return redirect(url_for('index'))
+
+@app.route('/return_volunteer')
+def return_volunteer():
+    return redirect(url_for('volunteer_ui'))
+
+@app.route('/return_admin')
+def return_admin():
+    return redirect(url_for('admin_ui'))
+
 if __name__ == '__main__':
     init_db()  # This will ensure the database schema is up-to-date
     app.run(debug=True, host='0.0.0.0', port=5003)
+
 
 

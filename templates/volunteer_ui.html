@@ -23,6 +23,11 @@
     <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
     <div class="dashboard-container">
         <h1>Welcome, Volunteer!</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {# Messages are retrieved and consumed but not displayed #}
+            {% endif %}
+        {% endwith %}
         <p>This is your dashboard. From here, you can:</p>
         <ul>
             <li>View your upcoming volunteer events</li>
