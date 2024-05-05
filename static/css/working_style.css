@@ -1,0 +1,71 @@
+
+body {
+    font-family: 'Trebuchet MS', Helvetica, sans-serif;
+    background: linear-gradient(135deg, #e9a2b4 0%, #eed447 100%);
+    color: #0033ff8f;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container {
+    background-color: #e9a2b4dd; /* Using a slight transparency on the primary color */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #e9a2b4;
+    text-shadow: 1px 1px 2px #2f53e2;
+}
+
+a {
+    color: #2f53e2;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #d7682d;
+}
+
+button {
+    background-color: #eed447;
+    color: #e9a2b4;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 2px 2px 4px #2f53e2;
+}
+
+button:hover {
+    background-color: #d7682d;
+}
+
+input, textarea {
+    border: 2px solid #e9a2b4;
+    background-color: transparent;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #2f53e2;
+    box-shadow: 0 0 0 2px #d7682d;
+}
+
+.site-header h1 {
+    font-family: 'Impact', sans-serif; /* font-family: 'Fredoka One', cursive; */
+    font-size: 100px; /* Adjust this value as needed to make the header larger */
+    text-align: center; /* Centers the header text on the page */
+    margin-top: 0; /* Removes any default top margin for consistent spacing */
+    color: #eed447; /* This is an example color; change as needed */
+    text-shadow: 7px 7px 0px #d7682d; /* Optional: Adds a shadow with a color of your choice for depth */
+}

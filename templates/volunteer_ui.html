@@ -5,29 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const submitButtons = document.querySelectorAll('button[type="submit"]');
-            submitButtons.forEach(button => {
-                button.addEventListener('click', function(event) {
-                    setTimeout(() => { // Delay button disable to allow form submission
-                        button.disabled = true;
-                    }, 100); // Delay of 100 milliseconds
-                });
-            });
-        });
-    </script>
-    
+    <style>
+        body {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            min-height: 100vh; /* Minimum height to take full viewport */
+            margin: 0; /* Remove default margin */
+        }
+        .logout-button {
+            position: fixed; /* Changed to fixed to stay at the top right regardless of scrolling */
+            right: 20px; 
+            top: 20px;
+            font-size: 1.5em; /* Larger font size for better visibility */
+            font-weight: bold; /* Bold text for emphasis */
+            padding: 1rem 2rem; /* Larger button size */
+        }
+        .dashboard-container {
+            text-align: center; /* Center text within the container */
+            width: 80%; /* Limit width and center it */
+            max-width: 960px; /* Maximum width */
+        }
+        table {
+            width: 100%; /* Full width to use available space */
+            border-collapse: collapse; /* Ensures borders are neat */
+            margin-top: 20px; /* Space from content above */
+            margin: auto; /* Center table in the container */
+        }
+        th, td {
+            border: 1px solid #D6536D; /* Consistent with your design */
+            padding: 10px; /* Comfortable spacing */
+            text-align: left; /* Align text to the left */
+        }
+        .dashboard-actions {
+            text-align: center; /* Center align the Log Hours button */
+            margin-top: 20px; /* Extra space above the button */
+        }
+        ul {
+            list-style-position: inside; /* Moves bullet points inside the list area */
+            padding-left: 0; /* Removes default padding */
+            text-align: left; /* Aligns text to the left */
+            display: inline-block; /* Ensures list does not take full width */
+        }
+    </style>
 </head>
 <body>
     <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
     <div class="dashboard-container">
         <h1>Welcome, Volunteer!</h1>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {# Messages are retrieved and consumed but not displayed #}
-            {% endif %}
-        {% endwith %}
         <p>This is your dashboard. From here, you can:</p>
         <ul>
             <li>View your upcoming volunteer events</li>
@@ -36,20 +61,34 @@
         </ul>
 
         <h1>Available Shifts</h1>
-        {% for shift in shifts %}
-        <div class="shift-container">
-            <h2>{{ shift[1] }}</h2> <!-- Title -->
-            <p>{{ shift[2] }} to {{ shift[3] }}</p> <!-- Start to End Time -->
-            <p>{{ shift[4] }}</p> <!-- Description -->
-            {% if shift[5] %}
-                <p>{{ shift[5] }} signed up for this shift</p>
-            {% else %}
-                <form action="{{ url_for('signup_for_shift', shift_id=shift[0]) }}" method="post">
-                    <button onclick="disable(this)" type="submit" data-email="{{ user_email }}">Sign Up</button>
-                </form>
-            {% endif %}
-        </div>
-        {% endfor %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Time</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shift in shifts %}
+                <tr class="shift-container">
+                    <td>{{ shift[1] }}</td> <!-- Title -->
+                    <td>{{ shift[2] }} to {{ shift[3] }}</td> <!-- Start to End Time -->
+                    <td>{{ shift[4] }}</td> <!-- Description -->
+                    <td>
+                        {% if shift[5] %}
+                            <p>{{ shift[5] }} signed up for this shift</p>
+                        {% else %}
+                            <form action="{{ url_for('signup_for_shift', shift_id=shift[0]) }}" method="post">
+                                <button onclick="disable(this)" type="submit" data-email="{{ user_email }}">Sign Up</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         <div class="dashboard-actions">
             <a href="{{ url_for('log_hours') }}" class="button">Log Hours</a>

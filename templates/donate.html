@@ -6,38 +6,35 @@
     <title>Donate - Food 'n Stuff</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
+        .go-back-button {
+            font-size: 1.5em; /* Larger font size for better visibility */
+            font-weight: bold; /* Bold text for emphasis */
+            padding: 1rem 2rem; /* Larger button size */
         }
         .form-container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 50%;
-            margin: auto;
+            width: 100%; /* Ensures full width */
+            max-width: 600px; /* Sets a max-width for the form */
+            margin: auto; /* Centers the form horizontally */
+            display: flex; /* Uses flexbox for layout */
+            flex-direction: column; /* Stacks flex items vertically */
+            align-items: center; /* Centers flex items horizontally */
         }
-        label, input, select, textarea {
-            display: block;
-            width: 90%;
-            margin-top: 5px;
+        form {
+            width: 100%; /* Form takes full width of its container */
         }
-        input[type="checkbox"] {
-            display: inline-block;
-            width: auto;
+        label {
+            width: 100%; /* Labels take full width for consistency */
+            margin-top: 10px; /* Adds top margin for spacing between form fields */
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea {
+            width: 100%; /* Inputs take full width */
+            box-sizing: border-box; /* Includes padding and border in width calculation */
         }
         button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
+            margin-top: 20px; /* Adds top margin to separate button from form fields */
         }
     </style>
     <script>
@@ -66,6 +63,7 @@
     </script>
 </head>
 <body>
+    <a href="{{ url_for('index') }}" class="button go-back-button" style="position: absolute; right: 20px; top: 20px;">Go Back</a>
     <div class="form-container">
         <h1>Donate to Food 'n Stuff</h1>
         <form action="/donate" method="post">
@@ -76,8 +74,10 @@
             <input type="text" id="affiliation" name="affiliation">
 
             <label>Donation Type:</label>
-            <label><input type="checkbox" name="donation_type" value="Cash"> Cash Donation</label>
-            <label><input type="checkbox" name="donation_type" value="Items"> Items Donation</label>
+            <div>
+                <label><input type="checkbox" name="donation_type" value="Cash"> Cash Donation</label>
+                <label><input type="checkbox" name="donation_type" value="Items"> Items Donation</label>
+            </div>
 
             <div id="dedicated-amount-container" style="display: none;">
                 <label for="dedicated-amount">Dedicated Amount:</label>

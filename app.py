@@ -29,22 +29,25 @@ init_mail(app)  # Initialize the mail configuration from email_service
 def index():
     return render_template('index.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    email = request.form['login-email']
-    password = request.form['login-password']
-    user = users.get(email)
-    
-    if user and check_password_hash(user['password'], password):
-        session['user_email'] = email  # Save the user's email in the session
-        flash('Login successful!', 'success')
-        if user['role'] == 'admin':
-            return redirect(url_for('admin_ui'))
-        elif user['role'] == 'volunteer':
-            return redirect(url_for('volunteer_ui'))
-    else:
-        flash('Invalid email or password.', 'danger')
-    return redirect(url_for('index'))
+    if request.method == 'POST':
+        email = request.form['login-email']
+        password = request.form['login-password']
+        role_requested = request.form['role']  # Retrieve the role from the form
+        user = users.get(email)
+        if user and check_password_hash(user['password'], password):
+            session['user_email'] = email  # Save the user's email in the session
+            if role_requested == user['role']:  # Check if the requested role matches the stored role
+                if user['role'] == 'admin':
+                    return redirect(url_for('admin_ui'))
+                elif user['role'] == 'volunteer':
+                    return redirect(url_for('volunteer_ui'))
+            else:
+                flash('Invalid role.', 'danger')
+        else:
+            flash('Invalid email or password.', 'danger')
+    return render_template('login.html')
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -306,6 +309,3 @@ def return_admin():
 if __name__ == '__main__':
     init_db()  # This will ensure the database schema is up-to-date
     app.run(debug=True, host='0.0.0.0', port=5003)
-
-
-

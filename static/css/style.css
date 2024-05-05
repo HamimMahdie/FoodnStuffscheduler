@@ -1,108 +1,81 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Trebuchet MS', Helvetica, sans-serif;
+    background: #EBE9E1; /* light cream background */
+    color: #E43D12; /* bold red-orange for text */
+    height: 100vh;
     margin: 0;
-    padding: 20px;
     display: flex;
-    flex-direction: column; /* Changes layout to vertical stacking */
-    justify-content: flex-start; /* Aligns content to the start of the main axis */
-    align-items: center; /* Keeps items centered on the cross axis */
-    min-height: 100vh; /* Ensures it at least covers the viewport */
-    overflow: auto; /* Allows scrolling */
-    position: relative; /* Ensures that absolute positioning inside body is relative to it */
-}
-
-
-.logout-button {
-    position: fixed; /* Fixes the button relative to the viewport */
-    top: 10px; /* Space from the top of the viewport */
-    right: 10px; /* Space from the right of the viewport */
-    background-color: #dc3545; /* Bootstrap danger color */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    text-decoration: none;
-    cursor: pointer;
-    z-index: 1000; /* Ensures it stays on top of other content */
-}
-
-.logout-button:hover {
-    background-color: #c82333;
-}
-
-
-
-.auth-container {
-    width: 90%;                        /* Adjusted width as per HTML specifics */
-    max-width: 600px;                  /* Added max-width constraint */
-    margin: 20px auto;                 /* Centered and added vertical margin */
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
+    font-size: 1.2em; /* Adjust to your preferred size */
 }
 
-.form-container {
-    margin-bottom: 20px;               /* Updated margin-bottom for separation */
-    padding: 20px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+
+input[type="submit"]:hover {
+    background-color: #FFA2B6; /* soft pink for button hover */
+    color: #FFFFFF; /* change text color if needed for better visibility */
 }
 
-h1, h2 {
-    text-align: center;
-    color: #333;                       /* Ensuring consistent text color for headers */
+.dashboard-container h1 {
+    text-align: center; /* Center the heading */
 }
 
-.form-group {
-    margin-bottom: 15px;
+.container {
+    background-color: transparent; /* Container background is now transparent */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: none; /* Removing box shadow for flat design */
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
+h1, h2, h3, h4, h5, h6 {
+    color: #D6536D; /* dark pink for headers */
+    text-shadow: 1px 1px 2px #FFA2B6; /* pink shadow for headers */
 }
 
-input[type="email"], input[type="password"], input[type="text"] {
-    width: calc(100% - 12px);          /* Adjusted width to account for padding */
-    padding: 10px;
-    margin: 0 0 20px 0;                /* Added consistent margin */
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+a {
+    color: #EFB11D; /* mustard color for links */
+    text-decoration: none;
 }
 
-button, .donate-button {
-    width: 100%;                       /* Ensuring buttons take full container width */
-    padding: 10px 20px;                /* Uniform padding for all buttons */
-    background-color: #007BFF;         /* Standardized button color */
-    color: white;
+a:hover {
+    color: #FFA2B6; /* soft pink for hover */
+}
+
+button {
+    background-color: #EFB11D; /* mustard color for buttons */
+    color: #EBE9E1; /* cream color for button text */
     border: none;
-    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
     cursor: pointer;
-}
-
-button:hover, .donate-button:hover {
-    background-color: #0056b3;         /* Darker shade on hover for better UX */
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
 }
 
 button:hover {
-    background-color: #c82333; /* Darker shade of red on hover */
+    background-color: #FFA2B6; /* soft pink for button hover */
 }
 
-.footer {
-    text-align: center;                /* Centralized footer text */
-    margin-top: 20px;
-    font-size: 14px;                   /* Uniform font size for footer */
+input, textarea {
+    border: 2px solid #D6536D; /* dark pink borders */
+    background-color: transparent;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
 }
 
-/* Additional styles for other aspects of the interface */
-.hidden {
-    display: none;                     /* Ensuring hidden class is available */
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #D6536D; /* dark pink for focused border */
+    box-shadow: 0 0 8px #FFA2B6; /* soft pink glow for focus */
+}
+
+.site-header h1 {
+    font-family: 'Impact', sans-serif;
+    font-size: 100px;
+    text-align: center;
+    margin-top: 0;
+    color: #D6536D; /* dark pink for site header */
+    text-shadow: 4px 4px 0px #FFA2B6; /* soft pink shadow for site header */
 }
