@@ -34,11 +34,12 @@ def login():
     if request.method == 'POST':
         email = request.form['login-email']
         password = request.form['login-password']
-        role_requested = request.form['role']  # Retrieve the role from the form
+        role_requested = request.form['role']
         user = users.get(email)
-        if user and check_password_hash(user['password'], password):
-            session['user_email'] = email  # Save the user's email in the session
-            if role_requested == user['role']:  # Check if the requested role matches the stored role
+
+        if user and check_password_hash(user['password'], password):# Proceed if password matches
+            session['user_email'] = email
+            if role_requested == user['role']:
                 if user['role'] == 'admin':
                     return redirect(url_for('admin_ui'))
                 elif user['role'] == 'volunteer':
@@ -47,26 +48,31 @@ def login():
                 flash('Invalid role.', 'danger')
         else:
             flash('Invalid email or password.', 'danger')
+
     return render_template('login.html')
 
-@app.route('/signup', methods=['POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    email = request.form['signup-email']
-    password = request.form['signup-password']
-    confirm_password = request.form['signup-confirm-password']
+    if request.method == 'POST':
+        email = request.form['signup-email']
+        password = request.form['signup-password']
+        confirm_password = request.form['signup-confirm-password']
+        role = request.form.get('role', 'volunteer')  # Assumes default role is 'volunteer'
 
-    if email in users:
-        flash('Email already exists.', 'danger')
-        return redirect(url_for('index'))
+        if email in users:
+            flash('Email already exists.', 'danger')
+            return redirect(url_for('index'))
 
-    if password != confirm_password:
-        flash('Passwords do not match.', 'danger')
-        return redirect(url_for('index'))
+        if password != confirm_password:
+            flash('Passwords do not match.', 'danger')
+            return redirect(url_for('index'))
 
-    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-    users[email] = {'password': hashed_password, 'role': 'volunteer'}  # Default role is volunteer
-    flash('Account created successfully, please login.', 'success')
-    return redirect(url_for('index'))
+        hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
+        users[email] = {'password': hashed_password, 'role': role}
+        flash('Account created successfully, please login.', 'success')
+        return redirect(url_for('login'))
+    else:
+        return render_template('signup.html') 
 
 # Database connection function
 def connect_db():
@@ -296,7 +302,7 @@ def thank_you():
 def logout():
     session.pop('user_email', None)  # Remove the user email from session
     flash('You have been logged out.', 'success')
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 @app.route('/return_volunteer')
 def return_volunteer():
