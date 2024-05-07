@@ -26,7 +26,7 @@ cd FoodnStuffscheduler
 Create and activate a new virtual environment:
 
 ```bash
-python3 -m venv env
+python -m venv env
 ```
 ```bash
 source env/bin/activate
@@ -54,7 +54,7 @@ pip install flask_mail
 Run the application using:
 
 ```bash
-python3 app.py
+python app.py
 ```
 
 ### Accessing the Application
@@ -66,6 +66,10 @@ http://localhost:5003
 ```
 
 to start using the FoodnStuffScheduler.
+
+### Utilizing the email service
+
+Please swap the placeholders with an actual email that will serve the donation notifications and the app password from Google.
 
 ## Features
 
