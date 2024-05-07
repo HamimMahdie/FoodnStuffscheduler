@@ -16,6 +16,8 @@ Clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/HamimMahdie/FoodnStuffscheduler.git
+```
+```bash
 cd FoodnStuffscheduler
 ```
 
@@ -25,6 +27,8 @@ Create and activate a new virtual environment:
 
 ```bash
 python3 -m venv env
+```
+```bash
 source env/bin/activate
 ```
 
@@ -40,6 +44,8 @@ If you still encounter errors, install the necessary packages individually:
 
 ```bash
 pip install Flask
+```
+```bash
 pip install flask_mail
 ```
 
