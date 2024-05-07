@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Manage Volunteer Hours</title>
+    <style>
+        body {
+            font-size: 1.2em; /* Increase font size globally for better readability */
+        }
+        table {
+            width: 90%; /* Reduce width to avoid touching the edges of the screen */
+            border-collapse: collapse; /* Ensures borders between cells are merged */
+            margin-top: 20px; /* Add some space above the table */
+            margin-left: auto; /* Center table horizontally */
+            margin-right: auto; /* Center table horizontally */
+        }
+        th, td {
+            border: 1px solid #D6536D; /* Adds borders to table cells */
+            padding: 10px; /* Adds padding inside table cells */
+            text-align: left; /* Align text to the left inside cells */
+        }
+        th {
+            background-color: #E43D12; /* Darker background for table headers */
+            color: #FFFFFF; /* White text for contrast */
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Zebra striping for table rows */
+        }
+        button {
+            font-size: 1em; /* Smaller font size for the clear button */
+            padding: 8px 16px; /* Smaller padding for the clear button */
+            margin-top: 20px; /* Space above the button */
+            cursor: pointer; /* Ensure it's clear this is a clickable button */
+        }
+        .logout-button {
+            font-size: 1.2em; /* Maintains larger font size for return home button */
+            padding: 10px 20px; /* More padding for better touch interaction */
+            margin-top: 20px; /* Space above the button */
+        }
+    </style>
+</head>
+<body>
+    <h1>Manage Volunteer Hours</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Volunteer Name</th>
+                <th>Email</th>
+                <th>Shift ID</th>
+                <th>Hours Worked</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hour_entry in logged_hours %}
+            <tr>
+                <td>{{ hour_entry[1] }}</td>
+                <td>{{ hour_entry[2] }}</td>
+                <td>{{ hour_entry[3] }}</td>
+                <td>{{ hour_entry[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form action="{{ url_for('clear_hours') }}" method="POST">
+        <button type="submit" onclick="return confirm('Are you sure you want to clear all hours? This action cannot be undone.');">Clear All Hours</button>
+    </form>
+    <br>
+    <a href="{{ url_for('return_admin') }}" class="logout-button">Return Home</a>
+</body>
+</html>

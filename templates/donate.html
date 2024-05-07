@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - Food 'n Stuff</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .go-back-button {
+            font-size: 1.5em; /* Larger font size for better visibility */
+            font-weight: bold; /* Bold text for emphasis */
+            padding: 1rem 2rem; /* Larger button size */
+        }
+        .form-container {
+            width: 100%; /* Ensures full width */
+            max-width: 600px; /* Sets a max-width for the form */
+            margin: auto; /* Centers the form horizontally */
+            display: flex; /* Uses flexbox for layout */
+            flex-direction: column; /* Stacks flex items vertically */
+            align-items: center; /* Centers flex items horizontally */
+        }
+        form {
+            width: 100%; /* Form takes full width of its container */
+        }
+        label {
+            width: 100%; /* Labels take full width for consistency */
+            margin-top: 10px; /* Adds top margin for spacing between form fields */
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        textarea {
+            width: 100%; /* Inputs take full width */
+            box-sizing: border-box; /* Includes padding and border in width calculation */
+        }
+        button {
+            margin-top: 20px; /* Adds top margin to separate button from form fields */
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const donationTypeInputs = document.querySelectorAll('input[name="donation_type"]');
+            const dedicatedAmountContainer = document.getElementById('dedicated-amount-container');
+            const dedicatedItemsContainer = document.getElementById('dedicated-items-container');
+
+            function toggleInputs() {
+                const donationTypes = Array.from(donationTypeInputs).filter(i => i.checked).map(i => i.value);
+                if (donationTypes.includes('Cash')) {
+                    dedicatedAmountContainer.style.display = 'block';
+                } else {
+                    dedicatedAmountContainer.style.display = 'none';
+                }
+                if (donationTypes.includes('Items')) {
+                    dedicatedItemsContainer.style.display = 'block';
+                } else {
+                    dedicatedItemsContainer.style.display = 'none';
+                }
+            }
+
+            donationTypeInputs.forEach(input => input.addEventListener('change', toggleInputs));
+            toggleInputs(); // Call on initial load
+        });
+    </script>
+</head>
+<body>
+    <a href="{{ url_for('index') }}" class="button go-back-button" style="position: absolute; right: 20px; top: 20px;">Go Back</a>
+    <div class="form-container">
+        <h1>Donate to Food 'n Stuff</h1>
+        <form action="/donate" method="post">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="affiliation">Trinity Affiliation (if any):</label>
+            <input type="text" id="affiliation" name="affiliation">
+
+            <label>Donation Type:</label>
+            <div>
+                <label><input type="checkbox" name="donation_type" value="Cash"> Cash Donation</label>
+                <label><input type="checkbox" name="donation_type" value="Items"> Items Donation</label>
+            </div>
+
+            <div id="dedicated-amount-container" style="display: none;">
+                <label for="dedicated-amount">Dedicated Amount:</label>
+                <input type="number" id="dedicated-amount" name="dedicated_amount">
+            </div>
+
+            <div id="dedicated-items-container" style="display: none;">
+                <label for="dedicated-items">Dedicated Items:</label>
+                <textarea id="dedicated-items" name="dedicated_items"></textarea>
+            </div>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone">
+
+            <button type="submit">Donate</button>
+        </form>
+    </div>
+</body>
+</html>

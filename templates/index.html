@@ -4,45 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Coordination and Scheduling Tool</title>
-    <!-- Link to the CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Increase font sizes */
+        body, h1, h2, p, a {
+            font-size: 1.2em; /* Larger text for better readability */
+        }
+        h1 {
+            font-size: 3em; /* Significantly larger title */
+        }
+        /* Additional styling for spacing and centering */
+        .content {
+            text-align: center; /* Center content */
+            padding: 4rem 0; /* Space between sections */
+        }
+        footer {
+            text-align: center;
+            padding-top: 4rem;
+        }
+        .button {
+            margin: 0 1rem; /* Added margin to buttons for better separation */
+            font-size: 1.5em; /* Larger font size for buttons */
+            font-weight: bold; /* Bold font for buttons */
+            padding: 1rem 2rem; /* Increased padding for larger button size */
+        }
+    </style>
 </head>
 <body>
-    <div class="auth-container">
-        <!-- Updated the action attribute for login -->
-        <div class="form-container" id="login-form">
-            <h2>Login</h2>
-            <form action="/login" method="post">
-                <div class="form-group">
-                    <label for="login-email">Email:</label>
-                    <input type="email" id="login-email" name="login-email" required>
-                </div>
-                <div class="form-group">
-                    <label for="login-password">Password:</label>
-                    <input type="password" id="login-password" name="login-password" required>
-                </div>
-                <button type="submit">Login</button>
-            </form>
-        </div>
-        <!-- Updated the action attribute for signup -->
-        <div class="form-container" id="signup-form">
-            <h2>Sign Up</h2>
-            <form action="/signup" method="post">
-                <div class="form-group">
-                    <label for="signup-email">Email:</label>
-                    <input type="email" id="signup-email" name="signup-email" required>
-                </div>
-                <div class="form-group">
-                    <label for="signup-password">Password:</label>
-                    <input type="password" id="signup-password" name="signup-password" required>
-                </div>
-                <div class="form-group">
-                    <label for="signup-confirm-password">Confirm Password:</label>
-                    <input type="password" id="signup-confirm-password" name="signup-confirm-password" required>
-                </div>
-                <button type="submit">Sign Up</button>
-            </form>
-        </div>
+    <header class="site-header">
+        <h1>Food 'n Stuff Scheduler</h1>
+    </header>
+    <div class="content">
+        <a href="{{ url_for('login') }}" class="button">Login</a>
+        <a href="{{ url_for('signup') }}" class="button">Sign Up</a>
     </div>
+    <footer>
+        <h2>About</h2>
+        <p>Food 'n Stuff is Trinity's student food and hygiene product pantry available to all students for free.</p>
+        <a href="{{ url_for('donate') }}" class="button">Donate</a>
+    </footer>
+    <br>
+    <br>
+    <p class="footer">ⓒLibreLeague</p>
 </body>
 </html>

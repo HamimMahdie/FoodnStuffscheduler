@@ -5,16 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrator Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-size: 1.2em; /* Larger text for better readability */
+        }
+        label[for="description"] {
+            vertical-align: top; /* Aligns the label with the top of the associated element */
+            margin-top: 0; /* Adjust as needed to fine-tune alignment */
+        }
+        .logout-button {
+            position: absolute; 
+            right: 20px; 
+            top: 20px;
+            font-size: 1.5em; /* Larger font size for better visibility */
+            font-weight: bold; /* Bold text for emphasis */
+            padding: 1rem 2rem; /* Larger button size */
+        }
+        .dashboard-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* Increased spacing between buttons */
+        }
+        /* Additional CSS for centering specific elements */
+        h2, form {
+            text-align: center; /* Center aligns the text and elements inside the form */
+        }
+        /* Adjust the size of the Post Shift button */
+        input[type="submit"] {
+            padding: 5px 10px; /* Smaller padding */
+            font-size: 1em; /* Smaller font size */
+        }     
+    </style>
 </head>
 <body>
+    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
     <div class="dashboard-container">
         <h1>Welcome, Administrator!</h1>
-        <p>This is your dashboard. From here, you can:</p>
-        <ul>
-            <li>Create and manage volunteer events</li>
-            <li>View reports on volunteer participation</li>
-            <li>Manage volunteer accounts</li>
-        </ul>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {# Messages are retrieved and consumed but not displayed #}
+            {% endif %}
+        {% endwith %}
+        <p>This is your dashboard. From here, you can manage various administrative tasks related to volunteering.</p>
+        <br>
+        <br>
+        <h2>Post a New Shift</h2>
+        <form action="/post_shift" method="post">
+            <label for="shift_title">Shift Title:</label>
+            <input type="text" id="shift_title" name="shift_title" required><br>
+            
+            <label for="start_datetime">Start (YYYY-MM-DDTHH:MM:SS):</label>
+            <input type="text" id="start_datetime" name="start_datetime" required><br>
+            
+            <label for="end_datetime">End (YYYY-MM-DDTHH:MM:SS):</label>
+            <input type="text" id="end_datetime" name="end_datetime" required><br>
+            
+            <label for="description">Description:</label>
+            <textarea id="description" name="description"></textarea><br>
+            
+            <input type="submit" value="Post Shift">
+        </form>
+        <br>
+        <br>
+        <div class="dashboard-actions">
+            <a href="{{ url_for('view_shifts') }}" class="button">View and Manage Shifts</a>
+            <a href="{{ url_for('manage_hours') }}" class="button">Manage Hours</a>
+        </div>
     </div>
 </body>
 </html>

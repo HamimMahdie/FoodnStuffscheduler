@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Volunteer Coordination and Scheduling Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .go-back-button {
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 0.8rem 1.6rem;
+            margin: auto;
+            display: block;
+            width: fit-content;
+            position: absolute; 
+            right: 20px; 
+            top: 20px;
+        }
+        .signup-section button {
+            font-size: 1em;
+            padding: 0.5rem 1rem;
+            margin-top: 10px;
+        }
+        .login-section {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="button go-back-button">Go Back</a>
+        <h1>Sign Up as Volunteer</h1>
+        <div class="signup-section">
+            <form action="{{ url_for('signup') }}" method="post">
+                <input type="hidden" name="role" value="volunteer">
+                <input type="email" name="signup-email" placeholder="Email" required>
+                <input type="password" name="signup-password" placeholder="Password" required>
+                <input type="password" name="signup-confirm-password" placeholder="Confirm Password" required>
+                <button type="submit">Sign Up as Volunteer</button>
+            </form>
+        </div>
+
+        <!-- Success Message and Login Button -->
+        <div id="login-section" class="login-section">
+            <p>Account created successfully. Please login using the button below:</p>
+            <a href="{{ url_for('login') }}" class="button login-button">Login</a>
+        </div>
+    </div>
+
+    <script>
+        function showLoginPrompt() {
+            document.getElementById('login-section').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

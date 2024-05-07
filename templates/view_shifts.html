@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Shifts</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            font-size: 1.2em; /* Increasing the font size globally */
+        }
+        .dashboard-container {
+            padding: 20px; /* Adding padding for better layout */
+            border-radius: 10px; /* Optional: rounding the corners */
+            margin: 20px; /* Margin around the container */
+            width: calc(100% - 40px); /* Adjusting width to account for padding */
+        }
+        table {
+            width: 100%; /* Making the table take full width */
+            border-collapse: collapse; /* Removing space between borders */
+        }
+        th, td {
+            border: 1px solid #D6536D; /* Adding a border to table cells */
+            padding: 8px; /* Padding inside cells */
+            text-align: left; /* Aligning text to the left */
+        }
+        th {
+            background-color: #E43D12; /* Darker background for headers */
+            color: #fff; /* White text for better contrast */
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Zebra striping for rows */
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Shifts Overview</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for shift in shifts %}
+                <tr>
+                    <td>{{ shift[0] }}</td>
+                    <td>{{ shift[1] }}</td>
+                    <td>{{ shift[2] }}</td>
+                    <td>{{ shift[3] }}</td>
+                    <td>{{ shift[4] }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_shift', shift_id=shift[0]) }}" method="POST">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{{ url_for('admin_ui') }}" class="return-button">Return Home</a>
+</body>
+</html>

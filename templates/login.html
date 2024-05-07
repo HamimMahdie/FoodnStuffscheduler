@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Volunteer Coordination and Scheduling Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Additional style for the Go Back button */
+        .go-back-button {
+            font-size: 1.5em; /* Larger font size for better visibility */
+            font-weight: bold; /* Bold text for emphasis */
+            padding: 1rem 2rem; /* Larger button size */
+        }
+        button {
+            background-color: #EFB11D; /* mustard color for buttons */
+            color: #EBE9E1; /* cream color for button text */
+            border: none;
+            padding: 0.3rem 0.6rem; /* Reduced padding for a smaller button */
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 0.8em; /* Reduced font size for a smaller button */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('index') }}" class="button go-back-button" style="position: absolute; right: 20px; top: 20px;">Go Back</a>
+        <h1>Login</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="login-section">
+            <h2>Login as Admin</h2>
+            <form action="{{ url_for('login') }}" method="post">
+                <input type="email" name="login-email" placeholder="Email" required>
+                <input type="password" name="login-password" placeholder="Password" required>
+                <input type="hidden" name="role" value="admin">
+                <button type="submit">Login as Admin</button>
+            </form>
+        </div>
+
+        <div class="login-section">
+            <h2>Login as Volunteer</h2>
+            <form action="{{ url_for('login') }}" method="post">
+                <input type="email" name="login-email" placeholder="Email" required>
+                <input type="password" name="login-password" placeholder="Password" required>
+                <input type="hidden" name="role" value="volunteer">
+                <button type="submit">Login as Volunteer</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

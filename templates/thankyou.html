@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      text-align: center; /* Centers text within the container */
+      width: 100%; /* Adjust width as needed */
+      max-width: 600px; /* Maximum width of the container */
+    }
+  </style>
+  <script>
+    setTimeout(function() {
+      window.location.href = "{{ url_for('index') }}";
+    }, 5000);
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>Thank You for Your Donation!</h1>
+    <br><br>
+    <p><b>Hayley Berliner</b> from the Community Service Office will be in touch with you.</p>
+    <p>Your support means everything to our cause and the community we serve.</p>
+    <br><br>
+    <p class="redirect-message">You will be redirected to the homepage shortly.</p>
+  </div>
+</body>
+</html>
