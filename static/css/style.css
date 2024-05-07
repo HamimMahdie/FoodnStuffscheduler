@@ -1,61 +1,81 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Trebuchet MS', Helvetica, sans-serif;
+    background: #EBE9E1; /* light cream background */
+    color: #E43D12; /* bold red-orange for text */
+    height: 100vh;
+    margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.auth-container {
-    display: flex;
     flex-direction: column;
-    align-items: center;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-size: 1.2em; /* Adjust to your preferred size */
 }
 
-.form-container {
-    margin: 10px;
+
+input[type="submit"]:hover {
+    background-color: #FFA2B6; /* soft pink for button hover */
+    color: #FFFFFF; /* change text color if needed for better visibility */
 }
 
-h2 {
-    text-align: center;
+.dashboard-container h1 {
+    text-align: center; /* Center the heading */
 }
 
-.form-group {
-    margin-bottom: 15px;
+.container {
+    background-color: transparent; /* Container background is now transparent */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: none; /* Removing box shadow for flat design */
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
+h1, h2, h3, h4, h5, h6 {
+    color: #D6536D; /* dark pink for headers */
+    text-shadow: 1px 1px 2px #FFA2B6; /* pink shadow for headers */
 }
 
-input[type="email"], input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    margin: 0 0 20px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+a {
+    color: #EFB11D; /* mustard color for links */
+    text-decoration: none;
 }
 
-button[type="submit"] {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
+a:hover {
+    color: #FFA2B6; /* soft pink for hover */
+}
+
+button {
+    background-color: #EFB11D; /* mustard color for buttons */
+    color: #EBE9E1; /* cream color for button text */
     border: none;
-    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.2em;
 }
 
-button[type="submit"]:hover {
-    background-color: #45a049;
+button:hover {
+    background-color: #FFA2B6; /* soft pink for button hover */
+}
+
+input, textarea {
+    border: 2px solid #D6536D; /* dark pink borders */
+    background-color: transparent;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #D6536D; /* dark pink for focused border */
+    box-shadow: 0 0 8px #FFA2B6; /* soft pink glow for focus */
+}
+
+.site-header h1 {
+    font-family: 'Impact', sans-serif;
+    font-size: 100px;
+    text-align: center;
+    margin-top: 0;
+    color: #D6536D; /* dark pink for site header */
+    text-shadow: 4px 4px 0px #FFA2B6; /* soft pink shadow for site header */
 }
