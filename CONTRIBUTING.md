@@ -65,7 +65,7 @@ All submissions—new features, bug fixes, and documentation changes—will go t
 
 ## Community
 
-Participation in this project is governed by a Code of Conduct. By participating, you are expected to uphold this code.
+Participation in this project is governed by a Code of Conduct. By participating, you are expected to uphold this code. Please see details regarding our Code of Conduct in CODEOFCONDUCT.md file.
 
 Thank you for contributing to Trinity's Food Pantry, Food 'n Stuff! We appreciate every contribution, and we are excited to review your contribution soon.
 
