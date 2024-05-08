@@ -2,6 +2,10 @@
 
 FoodnStuffScheduler is an open-source Flask-based app designed to schedule, manage and coordinate volunteer activities efficiently for Trinity College's food pantry, "Food 'n Stuff". This project allows volunteers to sign up and for admins to post shifts and manage their hours.
 
+  ![Logo](https://github.com/HamimMahdie/FoodnStuffscheduler/assets/144726390/a60db608-5f66-4275-b930-8f63d17dc2c8)  
+
+
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
