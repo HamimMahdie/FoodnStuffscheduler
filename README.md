@@ -67,9 +67,9 @@ http://localhost:5003
 
 to start using the FoodnStuffScheduler.
 
-### Utilizing the email service
+### Utilizing the Google's SMTP API for email service
 
-Please swap the placeholders with an actual email that will serve the donation notifications and the app password from Google.
+To use the **"Donate"** functionality, please swap the placeholders in app.py with an server email and an app password generated from Google that will serve the donation notifications. For more information, visit https://support.google.com/a/answer/176600?hl=en
 
 ## Features
 
