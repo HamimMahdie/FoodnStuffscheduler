@@ -80,7 +80,7 @@ To use the **"Donate"** functionality, please swap the placeholders in app.py wi
 
 ## Contributing
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are what make the **open-source** community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**. Please check out CONTRIBUTING.md for detailed guidelines. 
 
 ## Authors
 - **Josh Ames** 
