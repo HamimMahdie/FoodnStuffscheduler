@@ -1,0 +1,3 @@
+[submodule "FoodnStuffscheduler"]
+    path = FoodnStuffscheduler
+    url = https://github.com/hamimmahdie/FoodnStuffscheduler.git
